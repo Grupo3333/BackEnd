@@ -73,7 +73,7 @@ public class TemaController {
 	
 	@GetMapping("/tema/{tema}/nivel/{nivel}")
 	public ResponseEntity<List<Tema>> getAllByTemaAndNivel(@PathVariable String tema, @PathVariable String nivel) {
-		return ResponseEntity.ok(temaRepository.findAllByTemaContainingIgnoreCaseAndNivelIgnoreCase(tema, nivel));
+		return ResponseEntity.ok(temaRepository.findAllByTemaContainingIgnoreCaseAndNivelContainingIgnoreCase(tema, nivel));
 		
 	}
 	

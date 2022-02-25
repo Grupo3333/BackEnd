@@ -11,6 +11,6 @@ import com.generation.schoolboard.model.Tema;
 public interface TemaRepository extends JpaRepository<Tema, Long>{
 	public List<Tema>findAllByTemaContainingIgnoreCase(String tema);
 	public List<Tema>findAllByNivelContainingIgnoreCase(String nivel);
-	public List<Tema>findAllByTemaContainingIgnoreCaseAndNivelIgnoreCase(String tema, String nivel);
+	public List<Tema>findAllByTemaContainingIgnoreCaseAndNivelContainingIgnoreCase(String tema, String nivel);
 
 }
