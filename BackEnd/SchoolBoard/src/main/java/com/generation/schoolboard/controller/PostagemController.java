@@ -20,82 +20,78 @@ import org.springframework.web.bind.annotation.RestController;
 import com.generation.schoolboard.model.Postagem;
 import com.generation.schoolboard.repository.PostagemRepository;
 import com.generation.schoolboard.repository.TemaRepository;
+import com.generation.schoolboard.service.PostagemService;
 
 @RestController
 @RequestMapping("/postagens")
 @CrossOrigin(origins = "*", allowedHeaders = "*")
 public class PostagemController {
-	
+
 	@Autowired
 	private PostagemRepository postagemRepository;
-	
+
 	@Autowired
 	private TemaRepository temaRepository;
 	
+	@Autowired
+	private PostagemService postagemService;
+
 	@GetMapping
-	public ResponseEntity <List<Postagem>> getAll()
-	{
+	public ResponseEntity<List<Postagem>> getAll() {
 		return ResponseEntity.ok(postagemRepository.findAll());
 	}
-	
+
 	@GetMapping("/{id}")
-	public ResponseEntity <Postagem> getById(@PathVariable Long id)
-	{
-		return postagemRepository.findById(id)
-				.map(resposta -> ResponseEntity.ok(resposta))
+	public ResponseEntity<Postagem> getById(@PathVariable Long id) {
+		return postagemRepository.findById(id).map(resposta -> ResponseEntity.ok(resposta))
 				.orElse(ResponseEntity.notFound().build());
 	}
-	
+
 	@GetMapping("/titulo/{titulo}")
-	public ResponseEntity <List<Postagem>> getByTitulo(@PathVariable String titulo)
-	{
+	public ResponseEntity<List<Postagem>> getByTitulo(@PathVariable String titulo) {
 		return ResponseEntity.ok(postagemRepository.findAllByTituloContainingIgnoreCase(titulo));
 	}
-	
+
 	// busca por palavras chave no texto
 	@GetMapping("/texto/{descricao}")
-	public ResponseEntity <List<Postagem>> getByDescricao(@PathVariable String descricao)
-	{
+	public ResponseEntity<List<Postagem>> getByDescricao(@PathVariable String descricao) {
 		return ResponseEntity.ok(postagemRepository.findAllByDescricaoContainingIgnoreCase(descricao));
 	}
-	
-	//adicionar requisito do usuário
-	
+
+	// adicionar requisito do usuário
+
 	@PostMapping
-	public ResponseEntity <Postagem> postPostagem(@Valid @RequestBody Postagem postagem)
-	{
-		if (temaRepository.existsById(postagem.getTema().getId()))
-		{
-			return ResponseEntity.status(HttpStatus.CREATED).
-					body(postagemRepository.save(postagem));
-		}
-		else
-		{
+	public ResponseEntity<Postagem> postPostagem(@Valid @RequestBody Postagem postagem) {
+		if (temaRepository.existsById(postagem.getTema().getId())) {
+			return ResponseEntity.status(HttpStatus.CREATED).body(postagemRepository.save(postagem));
+		} else {
 			return ResponseEntity.badRequest().build();
 		}
 	}
-	
-	//adicionar requisito do usuário
-	@PutMapping
-	public ResponseEntity<Postagem> putPostagem(@Valid @RequestBody Postagem postagem)
-	{
-		if (temaRepository.existsById(postagem.getTema().getId()))
-				return postagemRepository.findById(postagem.getId())
-						.map(resposta -> ResponseEntity.ok()
-								.body(postagemRepository.save(postagem)))
-						.orElse(ResponseEntity.notFound().build());
 
-		return ResponseEntity.badRequest().build();	
+	// adicionar requisito do usuário
+	@PutMapping
+	public ResponseEntity<Postagem> putPostagem(@Valid @RequestBody Postagem postagem) {
+		if (temaRepository.existsById(postagem.getTema().getId()))
+			return postagemRepository.findById(postagem.getId())
+					.map(resposta -> ResponseEntity.ok().body(postagemRepository.save(postagem)))
+					.orElse(ResponseEntity.notFound().build());
+
+		return ResponseEntity.badRequest().build();
 	}
 
 	@DeleteMapping("/{id}")
-	public ResponseEntity<?> deletePostagem(@PathVariable Long id)
-	{
-		return postagemRepository.findById(id)
-				.map(resposta ->
-				{
-					postagemRepository.deleteById(id);
-					return ResponseEntity.noContent().build();
-				}).orElse(ResponseEntity.notFound().build());
+	public ResponseEntity<?> deletePostagem(@PathVariable Long id) {
+		return postagemRepository.findById(id).map(resposta -> {
+			postagemRepository.deleteById(id);
+			return ResponseEntity.noContent().build();
+		}).orElse(ResponseEntity.notFound().build());
+	}
+
+	@PutMapping("/curtir/{id}")
+	public ResponseEntity<Postagem> curtirPostagemId (@PathVariable Long id){
+		return postagemService.curtir(id)
+				.map(resposta-> ResponseEntity.ok(resposta))
+				.orElse(ResponseEntity.badRequest().build());
 	}
 }
