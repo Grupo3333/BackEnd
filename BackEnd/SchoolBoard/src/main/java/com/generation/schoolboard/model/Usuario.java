@@ -9,48 +9,47 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
+import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
-
 @Entity
-@Table( name = "tb_usuarios")
+@Table(name = "tb_usuarios")
 public class Usuario {
-	
+
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
-	
+
 	@NotBlank(message = "O campo nome é obrigatório")
 	private String nome;
-	
+
+	@Email(message = "Use um email válido")
 	@NotBlank(message = "O campo usuário é obrigatório")
 	private String usuario;
-	
+
 	@NotBlank(message = "O campo senha é obrigatório")
-	@Size(min = 8, max = 10)
+	@Size(min = 8)
 	private String senha;
-	
+
 	@NotBlank(message = "O campo perfil é obrigatório")
 	private String perfil;
-	
+
 	private String foto;
-	
-	@OneToMany(mappedBy = "usuario", cascade = CascadeType.ALL)
+
+	@OneToMany(mappedBy = "usuario", cascade = CascadeType.REMOVE)
 	@JsonIgnoreProperties("usuario")
-	private List <Postagem> postagem;
-	
-		public List<Postagem> getPostagem() {
+	private List<Postagem> postagem;
+
+	public List<Postagem> getPostagem() {
 		return postagem;
 	}
 
 	public void setPostagem(List<Postagem> postagem) {
 		this.postagem = postagem;
 	}
-
-
 
 	public Long getId() {
 		return id;

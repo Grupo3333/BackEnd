@@ -1,5 +1,6 @@
 package com.generation.schoolboard.model;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -29,6 +30,7 @@ public class Postagem {
 	
 	private String imagem;
 	
+	@Column(columnDefinition = "integer default 0")
 	private Long curtidas;
 	
 	@ManyToOne
