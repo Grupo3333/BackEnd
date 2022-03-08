@@ -28,7 +28,7 @@ public class Tema {
 	private String nivel;
 	
 
-	@OneToMany(mappedBy = "tema", cascade = CascadeType.ALL)
+	@OneToMany(mappedBy = "tema", cascade = CascadeType.REMOVE)
 	@JsonIgnoreProperties("tema")
 	private List <Postagem> postagem;
 	
