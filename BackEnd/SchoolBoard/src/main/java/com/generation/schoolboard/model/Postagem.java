@@ -25,13 +25,13 @@ public class Postagem {
 	private String titulo;
 	
 	@NotBlank(message = "O campo texto é obrigatório")
-	@Size(min = 100, max = 1000, message = "O atributo texto deve conter no mínimo 100 e no máximo 1000 caracteres")
+	@Size(min = 10, max = 1000, message = "O atributo texto deve conter no mínimo 100 e no máximo 1000 caracteres")
 	private String descricao;
 	
 	private String imagem;
 	
 	@Column(columnDefinition = "integer default 0")
-	private Long curtidas;
+	private int curtidas;
 	
 	@ManyToOne
 	@JsonIgnoreProperties("postagem")
@@ -57,11 +57,11 @@ public class Postagem {
 		this.usuario = usuario;
 	}
 	
-		public Long getCurtidas() {
+		public int getCurtidas() {
 		return curtidas;
 	}
 
-	public void setCurtidas(Long curtidas) {
+	public void setCurtidas(int curtidas) {
 		this.curtidas = curtidas;
 	}
 
